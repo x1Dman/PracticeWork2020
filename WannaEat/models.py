@@ -107,7 +107,7 @@ class ReceiptShots(models.Model):
     receipt = models.ForeignKey(Receipt, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.title
 
     class Meta:
         verbose_name = "Shot"
@@ -139,8 +139,10 @@ class Rating(models.Model):
 
 
 class ReceiptBoard(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    test = models.TextField("Message")
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.TextField("Name")
+    email = models.EmailField("Email")
+    text = models.TextField("Message")
     parent = models.ForeignKey(
         'self', on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -149,7 +151,7 @@ class ReceiptBoard(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} - {self.receipt}"
+        return f"{self.name} - {self.email}"
 
     class Meta:
         verbose_name = "Board"
