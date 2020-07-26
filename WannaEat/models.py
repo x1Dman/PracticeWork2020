@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -24,7 +25,7 @@ class User(models.Model):
     info = models.TextField("Information")
 
     def __str__(self):
-        return self.name
+        return self.nickname
 
     class Meta:
         verbose_name = "User"
@@ -64,7 +65,7 @@ class ProductsList(models.Model):
     product_count = models.IntegerField("Product_count")
 
     def __str__(self):
-        return self.name
+        return "Products list"
 
     class Meta:
         verbose_name = "Products list"
@@ -89,7 +90,10 @@ class Receipt(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("receipt_detail", kwargs={"slug": self.video_ulr})
 
     class Meta:
         verbose_name = "Receipt"
@@ -114,7 +118,7 @@ class RatingStar(models.Model):
     value = models.PositiveSmallIntegerField("Value", default=0)
 
     def __str__(self):
-        return self.name
+        return "ratingStar"
 
     class Meta:
         verbose_name = "Star"
@@ -127,7 +131,7 @@ class Rating(models.Model):
     receipt = models.ForeignKey(Receipt, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return "rating"
 
     class Meta:
         verbose_name = "Rating"
