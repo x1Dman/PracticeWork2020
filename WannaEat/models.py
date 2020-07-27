@@ -92,6 +92,9 @@ class Receipt(models.Model):
     def __str__(self):
         return self.title
 
+    def get_review(self):
+        return self.receiptboard_set.filter(parent__isnull=True)
+
     def get_absolute_url(self):
         return reverse("receipt_detail", kwargs={"slug": self.video_ulr})
 

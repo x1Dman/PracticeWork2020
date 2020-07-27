@@ -29,6 +29,8 @@ class AddReview(View):
         form = ReviewForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
+            if request.POST.get("parent", None):
+                form.parent_id = int(request.POST.get("parent"))
             form.receipt_id = pk
             form.save()
             print("congratz for send msg")
