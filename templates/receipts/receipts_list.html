@@ -12,7 +12,7 @@
                         <div class="item-info-product">
                             <h4 class="">
                                 <a href="{{ receipt.get_absolute_url }}"
-                                   class="editContent">{{ receipt.title }}</a>
+                                   class="editContent" id="UITestButton">{{ receipt.title }}</a>
                             </h4>
 
                             <div class="product_price">
@@ -25,6 +25,5 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
     </div>
 {% endblock receipts %}

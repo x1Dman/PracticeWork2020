@@ -1,5 +1,14 @@
 {% extends 'receipts/base.html' %}
 {% load static %}
+
+{% block container %}
+    <div class="container py-md-3">
+{% endblock container %}
+
+{% block sidebar %}
+    <div class="container py-md-3">
+{% endblock sidebar %}
+
 {% block receipts %}
     <div class="left-ads-display col-lg-8">
         <div class="row">
@@ -63,7 +72,6 @@
             </div>
         </div>
         <div class="row sub-para-w3layouts mt-5">
-
             <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
                 О {{ receipt.title }}</h3>
             <p>
@@ -71,76 +79,66 @@
                     <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.description }}">
                 {% endfor %}
             </p>
-            <p class="editContent" style="outline: none; cursor: inherit;">{{ receipt.description }}</p>
-            <p class="mt-3 italic-blue editContent"
-               style="outline: none; cursor: inherit;">
-                <iframe width="560" height="315"
-                        src="https://www.youtube.com/embed/A36LahZNUiE?controls=0"
-                        frameborder="0" allow="accelerometer; autoplay;
-                                                                           encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-
-                </iframe>
-            </p>
-            <p>
-                <br>
+            <p class="editContent">{{ receipt.description }}</p>
             <h3>Шаги готовки</h3>
             <p class="mt-3 editContent" style="outline: none; cursor: inherit;">
                 {{ receipt.cooking_steps }}
             </p>
-            </p>
-            </br>
         </div>
         <hr>
         <div class="row">
             <div class="single-form-left">
-            <!-- contact form grid -->
-            <div class="contact-single">
-                <h3 class="editContent" style="outline: none; cursor: inherit;">
+                <!-- contact form grid -->
+                <div class="contact-single">
+                    <h3 class="editContent">
                                     <span class="sub-tittle editContent"
-                                          style="outline: none; cursor: inherit;">{{ receipt.receiptboard_set.count }}</span>Оставить отзыв</h3>
-                <form action="{% url 'add_review' receipt.id %}" method="post" class="mt-4" id="formReview">
-                    {% csrf_token %}
-                    <input type="hidden" name="parent" id="contactparent" value="">
-                    <div class="form-group editContent">
-                        <label for="contactcomment" class="editContent">
-                            Ваш комментарий
-                        </label>
-                        <textarea class="form-control border" rows="5" name="text" id="contactcomment"
-                                  required=""></textarea>
-                    </div>
-                    <div class="d-sm-flex">
-                        <div class="col-sm-6 form-group p-0 editContent">
-                            <label for="contactusername" class="editContent">
-                                Имя *
+                                          style="outline: none; cursor: inherit;">{{ receipt.receiptboard_set.count }}</span>Оставить
+                        отзыв</h3>
+                    <form action="{% url 'add_review' receipt.id %}" method="post" class="mt-4" id="formReview">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent" id="contactparent" value="">
+                        <div class="form-group editContent">
+                            <label for="contactcomment" class="editContent">
+                                Ваш комментарий
                             </label>
-                            <input type="text" class="form-control border" name="name" id="contactusername" required="">
+                            <textarea class="form-control border" rows="5" name="text" id="contactcomment"
+                                      required=""></textarea>
                         </div>
-                        <div class="col-sm-6 form-group ml-sm-3 editContent">
-                            <label for="contactemail" class="editContent">
-                                Email *
-                            </label>
-                            <input type="email" class="form-control border" name="email" id="contactemail" required="">
+                        <div class="d-sm-flex">
+                            <div class="col-sm-6 form-group p-0 editContent">
+                                <label for="contactusername" class="editContent">
+                                    Имя *
+                                </label>
+                                <input type="text" class="form-control border" name="name" id="contactusername"
+                                       required="">
+                            </div>
+                            <div class="col-sm-6 form-group ml-sm-3 editContent">
+                                <label for="contactemail" class="editContent">
+                                    Email *
+                                </label>
+                                <input type="email" class="form-control border" name="email" id="contactemail"
+                                       required="">
+                            </div>
                         </div>
-                    </div>
-                    <button type="submit" class="mt-3 btn btn-success btn-block py-3">
-                        Отправить
-                    </button>
-                </form>
+                        <button type="submit" class="mt-3 btn btn-success btn-block py-3">
+                            Отправить
+                        </button>
+                    </form>
+                </div>
             </div>
-            <!--  //contact form grid ends here -->
-            {% for review in receipt.receiptboard_set.all %}
-                <div class="media py-5">
-                    <img src="{% static 'images/te2.jpg' %}" class="mr-3 img-fluid" alt="image">
-                    <div class="media-body mt-4">
-                        <h5 class="mt-0 editContent">
-                            {{ review.name }}
-                        </h5>
-                        <p>
-                            {{ review.text }}
-                        </p>
-                        <a href="#formReview" onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
-                        {% for rew in review.receiptboard_set.all %}
+        </div>
+        {% for review in receipt.receiptboard_set.all %}
+            <div class="media py-5">
+                <img src="{% static 'images/te2.jpg' %}" class="mr-3 img-fluid" alt="image">
+                <div class="media-body mt-4">
+                    <h5 class="mt-0 editContent">
+                        {{ review.name }}
+                    </h5>
+                    <p>
+                        {{ review.text }}
+                    </p>
+                    <a href="#formReview" onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
+                    {% for rew in review.receiptboard_set.all %}
                         <div>
                             <a class="pr-3" href="#">
                                 <img src="{% static 'images/te1.jpg' %}" class="img-fluid" alt="image">
@@ -154,17 +152,17 @@
                                 </p>
                             </div>
                         </div>
-                        {% endfor %}
-                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
+    </div>
     </div>
     </div>
     <script>
-    function addReview(name, id) {
-        document.getElementById("contactparent").value = id;
-        document.getElementById("contactcomment").innerText = `${name}, `;
-    }
+        function addReview(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("contactcomment").innerText = `${name}, `;
+        }
     </script>
 {% endblock receipts %}
