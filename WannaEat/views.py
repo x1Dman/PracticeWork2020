@@ -3,9 +3,12 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import Receipt
-from .forms import  ReviewForm
+from .forms import ReviewForm
+from .serializers import ReceiptListSerializer
+
 
 class ReceiptView(ListView):
     # model = Receipt
@@ -38,3 +41,10 @@ class AddReview(View):
             print("message wasn't sended")
         # full path to current page
         return redirect(Receipt.objects.get(id=pk).get_absolute_url())
+
+
+class ReceiptListView(APIView):
+    def get(self, request):
+        receipt = Receipt.objects
+        serializer = ReceiptListSerializer(receipt, many=True)
+        return Response(serializer.data)

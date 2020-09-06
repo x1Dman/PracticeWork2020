@@ -82,4 +82,4 @@ class WannaEatUITester:
         self.browser_type = browser_type
 
 
-uiTest = WannaEatUITester("chrome", "http://127.0.0.1:8000/").test_ui()
+WannaEatUITester("chrome", "http://127.0.0.1:8000/").test_ui()
