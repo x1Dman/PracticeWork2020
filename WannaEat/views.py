@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Receipt
-from .forms import ReviewForm
+from .forms import ReviewForm, UploadFileForm
 from .serializers import ReceiptListSerializer
 
 
@@ -43,8 +44,18 @@ class AddReview(View):
         return redirect(Receipt.objects.get(id=pk).get_absolute_url())
 
 
+
+
 class ReceiptListView(APIView):
     def get(self, request):
         receipt = Receipt.objects
         serializer = ReceiptListSerializer(receipt, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ReceiptListSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
