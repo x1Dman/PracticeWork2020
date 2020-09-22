@@ -1,14 +1,16 @@
+from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 # Create your views here.
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Receipt
 from .forms import ReviewForm, UploadFileForm
-from .serializers import ReceiptListSerializer
+from .serializers import ReceiptListSerializer, UserSerializer
 
 
 class ReceiptView(ListView):
@@ -44,6 +46,23 @@ class AddReview(View):
         return redirect(Receipt.objects.get(id=pk).get_absolute_url())
 
 
+class UserCreate(generics.CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = UserSerializer
+
+
+class LoginView(APIView):
+    permission_classes = ()
+
+    def post(self, request,):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username=username, password=password)
+        if user:
+            return Response({"token": user.auth_token.key})
+        else:
+            return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReceiptListView(APIView):
@@ -58,4 +77,3 @@ class ReceiptListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
