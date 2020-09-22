@@ -85,7 +85,7 @@ class Receipt(models.Model):
     category = models.ForeignKey(
         Category, verbose_name="Category", on_delete=models.SET_NULL, null=True
     )
-    product_list = models.OneToOneField(
+    product_list = models.ForeignKey(
         ProductsList, related_name="Receipt_list", on_delete=models.SET_NULL, null=True
     )
 
