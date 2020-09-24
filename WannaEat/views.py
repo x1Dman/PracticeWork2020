@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 # Create your views here.
@@ -72,8 +73,12 @@ class ReceiptListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        request.data['creator'] = request.user.id
         serializer = ReceiptListSerializer(data=request.data)
         if serializer.is_valid():
+#            serializer.creator_id = User.objects.get(pk=request.user.id)
+#            print(serializer.creator.id)
+            #serializer.title = "NET"
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

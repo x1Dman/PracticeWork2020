@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     """Category"""
@@ -16,20 +16,20 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
-class User(models.Model):
-    """User"""
-    user_img = models.ImageField("Image", upload_to="users/")
-    email = models.EmailField()
-    nickname = models.CharField("Nickname", max_length=100, default="Unknown")
-    friend_list = models.ForeignKey
-    info = models.TextField("Information")
-
-    def __str__(self):
-        return self.nickname
-
-    class Meta:
-        verbose_name = "User"
-        verbose_name_plural = "Users"
+#class AppUser(AbstactUser):
+#    """User"""
+#    user_img = models.ImageField("Image", upload_to="users/")
+#    email = models.EmailField()
+#    nickname = models.CharField("Nickname", max_length=100, default="Unknown")
+#    friend_list = models.ForeignKey
+#    info = models.TextField("Information")
+#
+#    def __str__(self):
+#        return self.nickname
+#
+#    class Meta:
+#        verbose_name = "User"
+#        verbose_name_plural = "Users"
 
 
 class FriendList(models.Model):
@@ -37,7 +37,7 @@ class FriendList(models.Model):
     # main user
     parent = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_parent_friends")
     # list of users, that in friendship with parent
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    #user = AppUser.objects.get("name" == name)
 
     def __str__(self):
         return self.name
@@ -80,7 +80,7 @@ class Receipt(models.Model):
     video_ulr = models.SlugField(max_length=160, unique=True)
     cooking_steps = models.TextField("Cooking_steps")
     creator = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True
+        User, editable=True, on_delete=models.CASCADE, null=True
     )
     category = models.ForeignKey(
         Category, verbose_name="Category", on_delete=models.SET_NULL, null=True
