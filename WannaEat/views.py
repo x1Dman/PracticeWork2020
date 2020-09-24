@@ -75,10 +75,14 @@ class LoginView(APIView):
 
 class ReceiptListView(APIView):
     def get(self, request):
-        products = str(request.query_params.get('products')).lower().split(",")
-        print(products)
+        getParam = request.query_params.get('products')
         filteredReceipt = []
         receipts = Receipt.objects.distinct()
+        if getParam is None:
+           serializer = ReceiptListSerializer(receipts, many=True)
+           return Response(serializer.data)
+        products = str(getParam).lower().split(",")
+        print(products)
         for receipt in receipts:
             arr = convert_list_to_string(receipt.arr()).lower().split(",")
             print(arr)
