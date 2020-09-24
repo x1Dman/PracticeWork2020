@@ -67,6 +67,10 @@ class ProductsList(models.Model):
     def __str__(self):
         return "Products list"
 
+    def getArray(self):
+        print(product.objects)
+        return product.objects()
+
     class Meta:
         verbose_name = "Products list"
         verbose_name_plural = "Products lists"

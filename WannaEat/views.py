@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.db.models import Q
 
 # Create your views here.
 from django.views.generic.base import View
@@ -68,7 +69,11 @@ class LoginView(APIView):
 
 class ReceiptListView(APIView):
     def get(self, request):
-        receipt = Receipt.objects
+        products = request.query_params.get('products')
+        filteredReceipt = []
+        receipts = Receipt.objects
+        for receipt in receipts:
+            print(receipt.product_list)
         serializer = ReceiptListSerializer(receipt, many=True)
         return Response(serializer.data)
 
