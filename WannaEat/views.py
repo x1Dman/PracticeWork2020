@@ -1,3 +1,5 @@
+from collections import Counter
+
 from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -14,6 +16,10 @@ from .models import Receipt
 from .forms import ReviewForm, UploadFileForm
 from .serializers import ReceiptListSerializer, UserSerializer
 
+def convert_list_to_string(org_list, separator=','):
+    """ Convert list to string, by joining all item in list with given separator.
+        Returns the concatenated string """
+    return separator.join(org_list)
 
 class ReceiptView(ListView):
     # model = Receipt
@@ -71,10 +77,13 @@ class ReceiptListView(APIView):
     def get(self, request):
         products = request.query_params.get('products')
         filteredReceipt = []
-        receipts = Receipt.objects
+        receipts = Receipt.objects.distinct()
         for receipt in receipts:
-            print(receipt.product_list)
-        serializer = ReceiptListSerializer(receipt, many=True)
+            arr = convert_list_to_string(receipt.arr())
+            if Counter(products) == Counter(arr):
+                print("Match!")
+                filteredReceipt.append(receipt)
+        serializer = ReceiptListSerializer(filteredReceipt, many=True)
         return Response(serializer.data)
 
     def post(self, request):

@@ -68,8 +68,11 @@ class ProductsList(models.Model):
         return "Products list"
 
     def getArray(self):
-        print(product.objects)
-        return product.objects()
+        products = self.product.distinct()
+        arrayProducts = []
+        for product in products:
+            arrayProducts.append(product.name)
+        return arrayProducts
 
     class Meta:
         verbose_name = "Products list"
@@ -92,6 +95,9 @@ class Receipt(models.Model):
     product_list = models.ForeignKey(
         ProductsList, related_name="Receipt_list", on_delete=models.SET_NULL, null=True
     )
+
+    def arr(self):
+        return self.product_list.getArray()
 
     def __str__(self):
         return self.title
