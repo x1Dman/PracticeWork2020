@@ -75,12 +75,14 @@ class LoginView(APIView):
 
 class ReceiptListView(APIView):
     def get(self, request):
-        products = request.query_params.get('products')
+        products = str(request.query_params.get('products')).lower().split(",")
+        print(products)
         filteredReceipt = []
         receipts = Receipt.objects.distinct()
         for receipt in receipts:
-            arr = convert_list_to_string(receipt.arr())
-            if Counter(products) == Counter(arr):
+            arr = convert_list_to_string(receipt.arr()).lower().split(",")
+            print(arr)
+            if set(arr).issubset(set(products)):
                 print("Match!")
                 filteredReceipt.append(receipt)
         serializer = ReceiptListSerializer(filteredReceipt, many=True)
